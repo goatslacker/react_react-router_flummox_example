@@ -151,9 +151,14 @@ var AppHandler = React.createClass({
       "div",
       null,
       React.createElement(
+        "a",
+        { className: "fork", href: "https://github.com/olegsmith/react_react-router_flummox_example" },
+        React.createElement("i", { className: "fap fap-fork" })
+      ),
+      React.createElement(
         "div",
         { className: "header" },
-        "GitHub Search"
+        "GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox"
       ),
       React.createElement(RouteHandler, null)
     );

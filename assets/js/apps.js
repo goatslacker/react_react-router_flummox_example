@@ -11,20 +11,15 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-// Router.run!
-
-exports.performRouteHandlerStaticMethod = performRouteHandlerStaticMethod;
+/*jshint -W018, -W040, -W064, -W083, -W086 */
 
 var React = _interopRequire(require("react"));
 
 var _reactRouter = require("react-router");
 
-var Router = _interopRequire(_reactRouter);
-
 var Route = _reactRouter.Route;
 var RouteHandler = _reactRouter.RouteHandler;
 var DefaultRoute = _reactRouter.DefaultRoute;
-var HistoryLocation = _reactRouter.HistoryLocation;
 var State = _reactRouter.State;
 
 var _flummox = require("flummox");
@@ -349,28 +344,6 @@ var Flux = exports.Flux = (function (Flummox) {
   return Flux;
 })(Flummox);
 
-function performRouteHandlerStaticMethod(routes, methodName) {
-  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    args[_key - 2] = arguments[_key];
-  }
-
-  return regeneratorRuntime.async(function performRouteHandlerStaticMethod$(context$1$0) {
-    while (1) switch (context$1$0.prev = context$1$0.next) {
-      case 0:
-        return context$1$0.abrupt("return", Promise.all(routes.map(function (route) {
-          return route.handler[methodName];
-        }).filter(function (method) {
-          return typeof method === "function";
-        }).map(function (method) {
-          return method.apply(undefined, args);
-        })));
-
-      case 1:
-      case "end":
-        return context$1$0.stop();
-    }
-  }, null, this);
-}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -380,6 +353,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
+/*jshint -W018, -W040, -W064, -W083, -W086 */
+
 var React = _interopRequire(require("react"));
 
 var Router = _interopRequire(require("react-router"));
@@ -388,7 +363,8 @@ var _componentsJsx = require("./components.jsx");
 
 var routes = _componentsJsx.routes;
 var Flux = _componentsJsx.Flux;
-var performRouteHandlerStaticMethod = _componentsJsx.performRouteHandlerStaticMethod;
+
+var performRouteHandlerStaticMethod = require("./utils.js").performRouteHandlerStaticMethod;
 
 module.exports = function (divid) {
 
@@ -422,13 +398,13 @@ module.exports = function (divid) {
   });
 };
 
-},{"./components.jsx":1,"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
+},{"./components.jsx":1,"./utils.js":3,"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
 "use strict";
 
+exports.performRouteHandlerStaticMethod = performRouteHandlerStaticMethod;
 exports.debounce = debounce;
-/*
- * Superagent promisification
- */
+
+/*jshint -W018, -W040, -W064, -W083, -W086 */
 
 var Request = require("superagent").Request;
 
@@ -442,6 +418,29 @@ Request.prototype.exec = function () {
     });
   });
 };
+
+function performRouteHandlerStaticMethod(routes, methodName) {
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  return regeneratorRuntime.async(function performRouteHandlerStaticMethod$(context$1$0) {
+    while (1) switch (context$1$0.prev = context$1$0.next) {
+      case 0:
+        return context$1$0.abrupt("return", Promise.all(routes.map(function (route) {
+          return route.handler[methodName];
+        }).filter(function (method) {
+          return typeof method === "function";
+        }).map(function (method) {
+          return method.apply(undefined, args);
+        })));
+
+      case 1:
+      case "end":
+        return context$1$0.stop();
+    }
+  }, null, this);
+}
 
 function debounce(func, wait, immediate) {
   var timeout;
@@ -457,7 +456,7 @@ function debounce(func, wait, immediate) {
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
   };
-};
+}
 
 var delay = exports.delay = function (time) {
   return new Promise(function (resolve) {
@@ -472,8 +471,6 @@ Object.defineProperty(exports, "__esModule", {
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-/*jslint browser: true, unused: false */
 
 var firstapp = _interopRequire(require("./firstapp/index.jsx"));
 

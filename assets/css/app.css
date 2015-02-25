@@ -424,7 +424,7 @@ div.searchpanel {
     border-radius: 10px;
     padding: 4px 7px; }
     div.searchpanel .search input {
-      width: 100%;
+      width: 90%;
       color: #000;
       outline: 0;
       border: none;

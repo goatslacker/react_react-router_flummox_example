@@ -533,8 +533,7 @@ var SearchHandler = React.createClass({
           "ul",
           { className: "itemlist" },
           items.map(function (item) {
-
-            var itemNameClass = "item-name " + (item.language ? item.language.toLowerCase().replace("#", "sharp") : "");
+            var languageName = item.language ? item.language.toLowerCase().replace("#", "sharp") : "";
 
             return React.createElement(
               "li",
@@ -545,7 +544,7 @@ var SearchHandler = React.createClass({
                 React.createElement("img", { className: "grow", src: item.owner.avatar_url }),
                 React.createElement(
                   "div",
-                  { className: itemNameClass },
+                  { className: "item-name " + languageName },
                   React.createElement(
                     "a",
                     { href: item.html_url, target: "_blank" },
@@ -559,40 +558,28 @@ var SearchHandler = React.createClass({
                   "div",
                   { className: "item-button-panel" },
                   React.createElement(
-                    "div",
-                    { className: "counter" },
-                    React.createElement(
-                      "a",
-                      { href: item.html_url },
-                      React.createElement("i", { className: "fap fap-star" }),
-                      item.stargazers_count
-                    )
+                    "a",
+                    { className: "counter", href: item.html_url, target: "_blank" },
+                    React.createElement("i", { className: "fap fap-star" }),
+                    item.stargazers_count
                   ),
                   React.createElement(
-                    "div",
-                    { className: "counter" },
-                    React.createElement(
-                      "a",
-                      { href: item.html_url },
-                      React.createElement("i", { className: "fap fap-watch" }),
-                      item.watchers_count
-                    )
+                    "a",
+                    { className: "counter", href: item.html_url, target: "_blank" },
+                    React.createElement("i", { className: "fap fap-watch" }),
+                    item.watchers_count
                   ),
                   React.createElement(
-                    "div",
-                    { className: "counter" },
-                    React.createElement(
-                      "a",
-                      { href: item.html_url },
-                      React.createElement("i", { className: "fap fap-fork" }),
-                      item.forks_count
-                    )
+                    "a",
+                    { className: "counter", href: item.html_url, target: "_blank" },
+                    React.createElement("i", { className: "fap fap-fork" }),
+                    item.forks_count
                   )
                 )
               ),
               React.createElement(
                 "div",
-                { className: "item-description" },
+                { className: "item-description " + languageName },
                 item.description
               )
             );

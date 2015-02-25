@@ -468,22 +468,6 @@ ul.itemlist {
       ul.itemlist li .item-name a {
         text-decoration: none;
         color: #fff; }
-      ul.itemlist li .item-name.c {
-        background-color: #1976D2; }
-      ul.itemlist li .item-name.javascript {
-        background-color: #E64A19; }
-      ul.itemlist li .item-name.java {
-        background-color: #F44336; }
-      ul.itemlist li .item-name.ruby {
-        background-color: #E040FB; }
-      ul.itemlist li .item-name.python {
-        background-color: #F57C00; }
-      ul.itemlist li .item-name.php {
-        background-color: #4CAF50; }
-      ul.itemlist li .item-name.csharp {
-        background-color: #795548; }
-      ul.itemlist li .item-name.scala {
-        background-color: #303F9F; }
     ul.itemlist li .item-img {
       position: relative; }
       ul.itemlist li .item-img img {
@@ -502,7 +486,7 @@ ul.itemlist {
         content: "";
         display: table;
         clear: both; }
-      ul.itemlist li .item-button-panel .counter {
+      ul.itemlist li .item-button-panel a.counter {
         -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
         -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -514,11 +498,9 @@ ul.itemlist {
         padding-bottom: 5px;
         background-color: #00BCD4;
         margin-left: 6px; }
-        ul.itemlist li .item-button-panel .counter i {
+        ul.itemlist li .item-button-panel a.counter i {
           margin-left: 10px;
           margin-right: 10px; }
-        ul.itemlist li .item-button-panel .counter a {
-          color: #fff; }
     ul.itemlist li .item-description {
       padding-top: 20px;
       display: block;
@@ -528,6 +510,30 @@ ul.itemlist {
       overflow: hidden;
       padding-left: 5px;
       padding-right: 5px; }
+
+.c {
+  background-color: #1976D2 !important; }
+
+.javascript {
+  background-color: #E64A19 !important; }
+
+.java {
+  background-color: #F44336 !important; }
+
+.ruby {
+  background-color: #E040FB !important; }
+
+.python {
+  background-color: #F57C00 !important; }
+
+.php {
+  background-color: #4CAF50 !important; }
+
+.csharp {
+  background-color: #795548 !important; }
+
+.scala {
+  background-color: #303F9F !important; }
 
 .grow {
   transition: all .2s ease-in-out; }

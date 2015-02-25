@@ -1,4 +1,270 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    draining = true;
+    var currentQueue;
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        var i = -1;
+        while (++i < len) {
+            currentQueue[i]();
+        }
+        len = queue.length;
+    }
+    draining = false;
+}
+process.nextTick = function (fun) {
+    queue.push(fun);
+    if (!draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],2:[function(require,module,exports){
+'use strict';
+
+var React = require('react'),
+    createSideEffect = require('react-side-effect');
+
+var _serverTitle = null;
+
+function getTitleFromPropsList(propsList) {
+  var innermostProps = propsList[propsList.length - 1];
+  if (innermostProps) {
+    return innermostProps.title;
+  }
+}
+
+var DocumentTitle = createSideEffect(function handleChange(propsList) {
+  var title = getTitleFromPropsList(propsList);
+
+  if (typeof document !== 'undefined') {
+    document.title = title || '';
+  } else {
+    _serverTitle = title || null;
+  }
+}, {
+  displayName: 'DocumentTitle',
+
+  propTypes: {
+    title: React.PropTypes.string.isRequired
+  },
+
+  statics: {
+    peek: function () {
+      return _serverTitle;
+    },
+
+    rewind: function () {
+      var title = _serverTitle;
+      this.dispose();
+      return title;
+    }
+  }
+});
+
+module.exports = DocumentTitle;
+},{"react":"react","react-side-effect":3}],3:[function(require,module,exports){
+'use strict';
+
+var React = require('react'),
+    invariant = require('react/lib/invariant'),
+    shallowEqual = require('react/lib/shallowEqual');
+
+function createSideEffect(onChange, mixin) {
+  invariant(
+    typeof onChange === 'function',
+    'onChange(propsList) is a required argument.'
+  );
+
+  var mountedInstances = [];
+
+  function emitChange() {
+    onChange(mountedInstances.map(function (instance) {
+      return instance.props;
+    }));
+  }
+
+  return React.createClass({
+    mixins: [mixin],
+
+    statics: {
+      dispose: function () {
+        mountedInstances = [];
+        emitChange();
+      }
+    },
+
+    shouldComponentUpdate: function (nextProps) {
+      return !shallowEqual(nextProps, this.props);
+    },
+
+    componentWillMount: function () {
+      mountedInstances.push(this);
+      emitChange();
+    },
+
+    componentDidUpdate: function () {
+      emitChange();
+    },
+
+    componentWillUnmount: function () {
+      var index = mountedInstances.indexOf(this);
+      mountedInstances.splice(index, 1);
+      emitChange();
+    },
+
+    render: function () {
+      if (this.props.children) {
+        return React.Children.only(this.props.children);
+      } else {
+        return null;
+      }
+    }
+  });
+}
+
+module.exports = createSideEffect;
+},{"react":"react","react/lib/invariant":4,"react/lib/shallowEqual":5}],4:[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule invariant
+ */
+
+"use strict";
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if ("production" !== process.env.NODE_ENV) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        'Invariant Violation: ' +
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+};
+
+module.exports = invariant;
+
+}).call(this,require('_process'))
+
+},{"_process":1}],5:[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule shallowEqual
+ */
+
+"use strict";
+
+/**
+ * Performs equality by iterating through keys on an object and returning
+ * false when any key has values which are not strictly equal between
+ * objA and objB. Returns true when the values of all keys are strictly equal.
+ *
+ * @return {boolean}
+ */
+function shallowEqual(objA, objB) {
+  if (objA === objB) {
+    return true;
+  }
+  var key;
+  // Test for A's keys different from B.
+  for (key in objA) {
+    if (objA.hasOwnProperty(key) &&
+        (!objB.hasOwnProperty(key) || objA[key] !== objB[key])) {
+      return false;
+    }
+  }
+  // Test for B's keys missing from A.
+  for (key in objB) {
+    if (objB.hasOwnProperty(key) && !objA.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+module.exports = shallowEqual;
+
+},{}],6:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -29,6 +295,8 @@ var Actions = _flummox.Actions;
 var Store = _flummox.Store;
 
 var debounce = require("./utils.js").debounce;
+
+var DocumentTitle = _interopRequire(require("react-document-title"));
 
 var request = _interopRequire(require("superagent"));
 
@@ -240,79 +508,84 @@ var SearchHandler = React.createClass({
 
     var items = this.state.items;
     var query = this.state.query;
+    var title = "Search in GitHub: " + query + " //Isomorphic React Demo";
 
     return React.createElement(
-      "div",
-      null,
+      DocumentTitle,
+      { title: title },
       React.createElement(
         "div",
-        { className: "searchpanel" },
+        null,
         React.createElement(
           "div",
-          { className: "search" },
-          React.createElement("input", { type: "text", value: query, onChange: this.handleChange, placeholder: "Search in GitHub" })
-        )
-      ),
-      items.length === 0 ? React.createElement(
-        "div",
-        { className: "nodata" },
-        "No data"
-      ) : React.createElement(
-        "ul",
-        { className: "itemlist" },
-        items.map(function (item) {
+          { className: "searchpanel" },
+          React.createElement(
+            "div",
+            { className: "search" },
+            React.createElement("input", { type: "text", value: query, onChange: this.handleChange, placeholder: "Search in GitHub" })
+          )
+        ),
+        items.length === 0 ? React.createElement(
+          "div",
+          { className: "nodata" },
+          "No data"
+        ) : React.createElement(
+          "ul",
+          { className: "itemlist" },
+          items.map(function (item) {
 
-          var itemNameClass = "item-name " + (item.language ? item.language.toLowerCase().replace("#", "sharp") : "");
+            var itemNameClass = "item-name " + (item.language ? item.language.toLowerCase().replace("#", "sharp") : "");
 
-          return React.createElement(
-            "li",
-            { key: item.id },
-            React.createElement(
-              "div",
-              { className: "item-img" },
-              React.createElement("img", { src: item.owner.avatar_url }),
+            return React.createElement(
+              "li",
+              { key: item.id },
               React.createElement(
                 "div",
-                { className: itemNameClass },
+                { className: "item-img" },
+                React.createElement("img", { src: item.owner.avatar_url }),
                 React.createElement(
-                  "a",
-                  { href: item.html_url, target: "_blank" },
-                  item.full_name,
-                  " (",
-                  item.language,
-                  ")"
+                  "div",
+                  { className: itemNameClass },
+                  React.createElement(
+                    "a",
+                    { href: item.html_url, target: "_blank" },
+                    item.full_name,
+                    " (",
+                    item.language,
+                    ")"
+                  )
+                ),
+                React.createElement(
+                  "div",
+                  { className: "item-button-panel" },
+                  React.createElement(
+                    "div",
+                    { className: "counter" },
+                    React.createElement("i", { className: "fap fap-star" }),
+                    item.stargazers_count
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "counter" },
+                    React.createElement("i", { className: "fap fap-watch" }),
+                    item.watchers_count
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "counter" },
+                    React.createElement("i", { className: "fap fap-fork" }),
+                    item.forks_count
+                  )
                 )
               ),
               React.createElement(
                 "div",
-                { className: "item-button-panel" },
-                React.createElement(
-                  "div",
-                  { className: "counter" },
-                  React.createElement("i", { className: "fap fap-star" }),
-                  item.stargazers_count
-                ),
-                React.createElement(
-                  "div",
-                  { className: "counter" },
-                  React.createElement("i", { className: "fap fap-watch" }),
-                  item.watchers_count
-                ),
-                React.createElement(
-                  "div",
-                  { className: "counter" },
-                  React.createElement("i", { className: "fap fap-fork" }),
-                  item.forks_count
-                )
+                { className: "item-description" },
+                item.description
               )
-            ),
-            React.createElement(
-              "div",
-              { className: "item-description" },
-              item.description
-            )
-          );
-        })
+            );
+          })
+        )
       )
     );
   }
@@ -348,7 +621,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-},{"./utils.js":3,"babel/polyfill":"babel/polyfill","flummox":"flummox","react":"react","react-router":"react-router","superagent":"superagent"}],2:[function(require,module,exports){
+},{"./utils.js":8,"babel/polyfill":"babel/polyfill","flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router","superagent":"superagent"}],7:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -398,7 +671,7 @@ module.exports = function (divid) {
   });
 };
 
-},{"./components.jsx":1,"./utils.js":3,"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
+},{"./components.jsx":6,"./utils.js":8,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
 exports.performRouteHandlerStaticMethod = performRouteHandlerStaticMethod;
@@ -479,7 +752,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-},{"./firstapp/index.jsx":2}]},{},[])
+},{"./firstapp/index.jsx":7}]},{},[])
 
 
 //# sourceMappingURL=apps.js.map

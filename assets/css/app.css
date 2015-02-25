@@ -482,11 +482,12 @@ ul.itemlist {
       ul.itemlist li .item-name.scala {
         background-color: #303F9F !important; }
     ul.itemlist li .item-img {
-      position: relative; }
+      position: relative;
+      width: 270px;
+      height: 270px; }
       ul.itemlist li .item-img img {
         margin: 0 auto;
         display: block;
-        width: 270px;
         width: 270px;
         height: auto; }
     ul.itemlist li .item-button-panel {

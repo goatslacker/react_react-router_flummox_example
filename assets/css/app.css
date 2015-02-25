@@ -465,9 +465,22 @@ ul.itemlist {
       filter: alpha(opacity=90);
       font-size: 20px;
       padding: 5px; }
-      ul.itemlist li .item-name a {
-        text-decoration: none;
-        color: #fff; }
+      ul.itemlist li .item-name.c {
+        background-color: #1976D2 !important; }
+      ul.itemlist li .item-name.javascript {
+        background-color: #E64A19 !important; }
+      ul.itemlist li .item-name.java {
+        background-color: #F44336 !important; }
+      ul.itemlist li .item-name.ruby {
+        background-color: #E040FB !important; }
+      ul.itemlist li .item-name.python {
+        background-color: #F57C00 !important; }
+      ul.itemlist li .item-name.php {
+        background-color: #4CAF50 !important; }
+      ul.itemlist li .item-name.csharp {
+        background-color: #795548 !important; }
+      ul.itemlist li .item-name.scala {
+        background-color: #303F9F !important; }
     ul.itemlist li .item-img {
       position: relative; }
       ul.itemlist li .item-img img {
@@ -504,36 +517,28 @@ ul.itemlist {
     ul.itemlist li .item-description {
       padding-top: 20px;
       display: block;
-      background-color: #FF5722;
-      color: #fff;
+      background-color: #f0f0f0;
+      color: #374c52;
       height: 80px;
       overflow: hidden;
       padding-left: 5px;
       padding-right: 5px; }
-
-.c {
-  background-color: #1976D2 !important; }
-
-.javascript {
-  background-color: #E64A19 !important; }
-
-.java {
-  background-color: #F44336 !important; }
-
-.ruby {
-  background-color: #E040FB !important; }
-
-.python {
-  background-color: #F57C00 !important; }
-
-.php {
-  background-color: #4CAF50 !important; }
-
-.csharp {
-  background-color: #795548 !important; }
-
-.scala {
-  background-color: #303F9F !important; }
+      ul.itemlist li .item-description.c {
+        background-color: #64a9ed !important; }
+      ul.itemlist li .item-description.javascript {
+        background-color: #f09275 !important; }
+      ul.itemlist li .item-description.java {
+        background-color: #f99d97 !important; }
+      ul.itemlist li .item-description.ruby {
+        background-color: #f0a4fd !important; }
+      ul.itemlist li .item-description.python {
+        background-color: #ffae5c !important; }
+      ul.itemlist li .item-description.php {
+        background-color: #92cf94 !important; }
+      ul.itemlist li .item-description.csharp {
+        background-color: #af8778 !important; }
+      ul.itemlist li .item-description.scala {
+        background-color: #6573d0 !important; }
 
 .grow {
   transition: all .2s ease-in-out; }

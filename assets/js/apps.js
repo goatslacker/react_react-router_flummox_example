@@ -543,16 +543,12 @@ var SearchHandler = React.createClass({
                 { className: "item-img" },
                 React.createElement("img", { className: "grow", src: item.owner.avatar_url }),
                 React.createElement(
-                  "div",
-                  { className: "item-name " + languageName },
-                  React.createElement(
-                    "a",
-                    { href: item.html_url, target: "_blank" },
-                    item.full_name,
-                    " (",
-                    item.language,
-                    ")"
-                  )
+                  "a",
+                  { className: "item-name " + languageName, href: item.html_url, target: "_blank" },
+                  item.full_name,
+                  " (",
+                  item.language,
+                  ")"
                 ),
                 React.createElement(
                   "div",

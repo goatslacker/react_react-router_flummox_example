@@ -542,7 +542,7 @@ var SearchHandler = React.createClass({
               React.createElement(
                 "div",
                 { className: "item-img" },
-                React.createElement("img", { src: item.owner.avatar_url }),
+                React.createElement("img", { className: "grow", src: item.owner.avatar_url }),
                 React.createElement(
                   "div",
                   { className: itemNameClass },
@@ -561,20 +561,32 @@ var SearchHandler = React.createClass({
                   React.createElement(
                     "div",
                     { className: "counter" },
-                    React.createElement("i", { className: "fap fap-star" }),
-                    item.stargazers_count
+                    React.createElement(
+                      "a",
+                      { href: item.html_url },
+                      React.createElement("i", { className: "fap fap-star" }),
+                      item.stargazers_count
+                    )
                   ),
                   React.createElement(
                     "div",
                     { className: "counter" },
-                    React.createElement("i", { className: "fap fap-watch" }),
-                    item.watchers_count
+                    React.createElement(
+                      "a",
+                      { href: item.html_url },
+                      React.createElement("i", { className: "fap fap-watch" }),
+                      item.watchers_count
+                    )
                   ),
                   React.createElement(
                     "div",
                     { className: "counter" },
-                    React.createElement("i", { className: "fap fap-fork" }),
-                    item.forks_count
+                    React.createElement(
+                      "a",
+                      { href: item.html_url },
+                      React.createElement("i", { className: "fap fap-fork" }),
+                      item.forks_count
+                    )
                   )
                 )
               ),

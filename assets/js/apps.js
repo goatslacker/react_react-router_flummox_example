@@ -655,7 +655,10 @@ var performRouteHandlerStaticMethod = require("./utils.js").performRouteHandlerS
 
 require("./libs/waves.js");
 
+var attachFastClick = _interopRequire(require("fastclick"));
+
 window.Waves.displayEffect();
+attachFastClick(document.body);
 
 module.exports = function (divid) {
 
@@ -689,7 +692,7 @@ module.exports = function (divid) {
   });
 };
 
-},{"./components.jsx":6,"./libs/waves.js":8,"./utils.js":10,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
+},{"./components.jsx":6,"./libs/waves.js":8,"./utils.js":10,"fastclick":"fastclick","react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
 /*!

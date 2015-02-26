@@ -298,6 +298,8 @@ var debounce = require("./utils.js").debounce;
 
 var DocumentTitle = _interopRequire(require("react-document-title"));
 
+var StickyMenu = _interopRequire(require("./stickymenu.jsx"));
+
 var request = _interopRequire(require("superagent"));
 
 require("babel/polyfill");
@@ -413,21 +415,17 @@ var AppHandler = React.createClass({
     return React.createElement(
       "div",
       null,
+      React.createElement("i", { className: "react fap fap-react" }),
       React.createElement(
         "a",
         { className: "fork", href: "https://github.com/olegsmith/react_react-router_flummox_example" },
         React.createElement("i", { className: "fap fap-fork" })
       ),
-      React.createElement(
-        "div",
-        { className: "header" },
-        "GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox"
-      ),
       React.createElement(RouteHandler, null)
     );
   } });
 
-// HomeHandler
+// SearchHandler
 
 var SearchHandler = React.createClass({
   displayName: "SearchHandler",
@@ -518,11 +516,28 @@ var SearchHandler = React.createClass({
         null,
         React.createElement(
           "div",
-          { className: "searchpanel" },
+          { className: "header" },
           React.createElement(
             "div",
-            { className: "search" },
-            React.createElement("input", { type: "text", value: query, onChange: this.handleChange, placeholder: "Search in GitHub" })
+            { className: "header-title" },
+            "GitHub Search: Isomorphic React + Babel (es7) + React-Router + Flummox"
+          ),
+          React.createElement(
+            "div",
+            null,
+            React.createElement(
+              StickyMenu,
+              { className: "searchpanel" },
+              React.createElement(
+                "div",
+                { className: "searchwrap" },
+                React.createElement(
+                  "div",
+                  { className: "search" },
+                  React.createElement("input", { type: "text", value: query, onChange: this.handleChange, autoFocus: true, placeholder: "Search in GitHub" })
+                )
+              )
+            )
           )
         ),
         items.length === 0 ? React.createElement(
@@ -620,7 +635,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-},{"./utils.js":9,"babel/polyfill":"babel/polyfill","flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router","superagent":"superagent"}],7:[function(require,module,exports){
+},{"./stickymenu.jsx":9,"./utils.js":10,"babel/polyfill":"babel/polyfill","flummox":"flummox","react":"react","react-document-title":2,"react-router":"react-router","superagent":"superagent"}],7:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -674,7 +689,7 @@ module.exports = function (divid) {
   });
 };
 
-},{"./components.jsx":6,"./libs/waves.js":8,"./utils.js":9,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
+},{"./components.jsx":6,"./libs/waves.js":8,"./utils.js":10,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
 /*!
@@ -1004,6 +1019,64 @@ module.exports = function (divid) {
 })(window);
 
 },{}],9:[function(require,module,exports){
+"use strict";
+
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+/*jshint -W018, -W040, -W064, -W083, -W086 */
+
+var React = _interopRequire(require("react"));
+
+var StickyMenu = React.createClass({
+    displayName: "StickyMenu",
+
+    componentDidMount: function componentDidMount() {
+        this.calculatePositions();
+
+        if (window) {
+            window.addEventListener("scroll", this.onPageScroll);
+            window.addEventListener("resize", this.onResize);
+        }
+    },
+
+    componentWillUnmount: function componentWillUnmount() {
+        if (window) {
+            window.removeEventListener("scroll", this.onPageScroll);
+            window.removeEventListener("resize", this.onResize);
+        }
+    },
+
+    calculatePositions: function calculatePositions() {
+        this._top = this.getDOMNode().parentNode.offsetTop;
+        this.getDOMNode().parentNode.style.minHeight = this.getDOMNode().clientHeight + "px";
+    },
+
+    onResize: function onResize(e) {
+        this.calculatePositions();
+        this.onPageScroll();
+    },
+
+    onPageScroll: function onPageScroll() {
+        if (window.scrollY >= this._top) {
+            this.getDOMNode().classList.add("sticky");
+        } else {
+            this.getDOMNode().classList.remove("sticky");
+        }
+    },
+
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: this.props.className },
+            this.props.children
+        );
+    }
+
+});
+
+module.exports = StickyMenu;
+
+},{"react":"react"}],10:[function(require,module,exports){
 "use strict";
 
 exports.performRouteHandlerStaticMethod = performRouteHandlerStaticMethod;

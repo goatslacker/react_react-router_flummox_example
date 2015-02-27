@@ -502,6 +502,8 @@ var SearchHandler = React.createClass({
     appActions.searchItems(query);
   },
 
+  handleFocus: function handleFocus(e) {},
+
   render: function render() {
 
     var items = this.state.items;
@@ -534,7 +536,7 @@ var SearchHandler = React.createClass({
                 React.createElement(
                   "div",
                   { className: "search" },
-                  React.createElement("input", { type: "text", value: query, onChange: this.handleChange, autoFocus: true, placeholder: "Search in GitHub" })
+                  React.createElement("input", { type: "text", value: query, onChange: this.handleChange, onFocus: this.handleFocus, placeholder: "Search in GitHub" })
                 )
               )
             )
